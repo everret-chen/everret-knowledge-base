@@ -678,12 +678,51 @@ chcp 65001                                              # CMD
 git config --global i18n.logOutputEncoding utf-8
 ```
 
-### 8.5 `Authentication failed` / 一直弹登录框
+### 8.5 `Authentication failed` / `Password authentication is not supported`
 
-1. 先确认 GitHub 密码不能用于 git（必须用 PAT 或 SSH）。
-2. 清掉旧凭据：凭据管理器 → Windows 凭据 → 删除 `git:https://github.com`。
-3. 检查凭据助手：`git config --global credential.helper` 应为 `manager`。
-4. 实在不行切 SSH：`git remote set-url origin git@github.com:everret-chen/everret-knowledge-base.git`。
+**本机实测的真实报错**（`git push` 时）：
+
+```
+remote: Invalid username or token. Password authentication is not supported for Git operations.
+fatal: Authentication failed for 'https://github.com/everret-chen/everret-knowledge-base.git/'
+```
+
+原因有两层，**第二层才是坑**：
+
+1. GitHub 早已不允许用登录密码做 git 操作，必须用 PAT（个人访问令牌）或 SSH。
+2. 本机凭据管理器里存着一个**已失效的旧 GitHub 凭据**，Git Credential Manager 会一直复用它 → 每次都失败，**而且连登录弹窗都不会出现**。必须先把旧凭据删掉。
+
+**处理（实测有效，按顺序执行）**：
+
+```bash
+# ① 看 GCM 里记着哪些 GitHub 账号
+git credential-manager github list
+
+# ② 删掉旧账号（<账号> 换成 list 里显示的那个）
+git credential-manager github logout <账号>
+
+# ③ 或者按 host 直接抹掉 github.com 的凭据
+"protocol=https`nhost=github.com`n`n" | git credential-manager erase      # [PS]
+printf 'protocol=https\nhost=github.com\n\n' | git credential-manager erase  # bash
+
+# ④ 再推送；这次会弹出登录窗口，完成授权后推送自动继续
+git push origin main
+```
+
+**图形界面等价操作**：`Win + R` → `control /name Microsoft.CredentialManager` → **Windows 凭据** → 删除 `git:https://github.com`。
+
+其他检查命令：
+
+```bash
+git config --global credential.helper     # 应为 manager
+git credential-manager diagnose           # GCM 自检，会生成日志
+```
+
+**推不上去时的备选**：改用 SSH（见 [3.2](#32-ssh备用方案)），彻底绕开 token 问题：
+
+```bash
+git remote set-url origin git@github.com:everret-chen/everret-knowledge-base.git
+```
 
 ### 8.6 `unable to get local issuer certificate` / `SSL certificate problem`
 
