@@ -1,0 +1,128 @@
+# ============================================================
+# .gitignore —— 哪些文件永远不进仓库
+#
+# 规则：每行一条；/ 开头表示从仓库根算起；末尾 / 表示只匹配目录；
+#       ! 开头表示「除外」（把上面忽略掉的某个文件重新放进来）。
+# 验证规则是否生效：git check-ignore -v 路径
+# 想强行提交一个被忽略的文件：git add -f 路径
+# ============================================================
+
+# ───────────── 1. 操作系统噪音 ─────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+._*
+*.lnk
+
+# ───────────── 2. 编辑器 / IDE ─────────────
+# 保留共享配置（团队约定），忽略个人化配置
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.vim/
+.history/
+
+# ───────────── 3. 语言与运行环境 ─────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+build/
+target/
+cmake-build-*/
+
+# ───────────── 4. 运行产物 / 临时文件 ─────────────
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+core
+*.core
+crashdump/
+
+# ───────────── 5. 敏感信息（务必不要提交） ─────────────
+# 私钥、证书、会话令牌一律不进仓库；确需留档请脱敏后另存为 .example
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*.keystore
+*.jks
+credentials.json
+token.txt
+
+# ───────────── 6. CTF 附件：默认忽略大体积二进制 ─────────────
+# 为什么忽略：流量包、内存镜像、压缩包动辄几十 MB，一旦提交就永久留在
+# git 历史里，clone 只会越来越慢，删掉文件也救不回来（除非改写历史）。
+#
+# 推荐做法：写题解时只提交「命令 + 脚本 + 结论」，附件放网盘/对象存储，
+# 在 payload.md / 做过的题.md 里贴下载链接。
+# 确实要入库：
+#   - 单个文件临时入库：git add -f 附件名
+#   - 长期管理大文件：启用 Git LFS（见 docs/Git使用手册.md 第 9.4 节）
+*.pcap
+*.pcapng
+*.cap
+*.mem
+*.vmem
+*.raw
+*.dmp
+*.iso
+*.img
+*.vmdk
+*.ova
+*.vdi
+*.7z
+*.rar
+*.zip
+*.tar
+*.gz
+*.xz
+*.bz2
+*.exe
+*.msi
+*.dll
+*.so
+*.dylib
+*.bin
+
+# 逆向 / 分析工具工程文件（体积大且机器相关）
+*.idb
+*.i64
+*.til
+*.gpr
+*.mex
+*.o
+*.obj
+*.class
+*.jar
+*.apk
+
+# ───────────── 7. 本仓库自己的草稿区 ─────────────
+# 没写完、不想提交的临时笔记丢这里，随写随删
+scratch/
+draft/
+*.local.md

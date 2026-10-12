@@ -1,0 +1,103 @@
+# ============================================================
+# .gitattributes —— 换行符与文本/二进制的统一声明
+#
+# 为什么需要它：Windows 上 core.autocrlf=true 只作用于「本机」，
+# 一旦换电脑、换 WSL、或在 GitHub 网页上编辑，CRLF/LF 就会互相
+# 污染，diff 里全是「整文件被改写」。这个文件进仓库，规则对
+# 所有克隆者生效，不依赖个人配置。
+# ============================================================
+
+# 默认：由 git 自动判断文本文件，仓库内一律存 LF
+* text=auto eol=lf
+
+# ---------- 明确按文本处理，检出也用 LF ----------
+*.md      text eol=lf
+*.markdown text eol=lf
+*.txt     text eol=lf
+*.rst     text eol=lf
+*.json    text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.toml    text eol=lf
+*.ini     text eol=lf
+*.conf    text eol=lf
+*.cfg     text eol=lf
+*.csv     text eol=lf
+*.sql     text eol=lf
+*.xml     text eol=lf
+*.html    text eol=lf
+*.css     text eol=lf
+*.js      text eol=lf
+*.ts      text eol=lf
+*.py      text eol=lf
+*.rb      text eol=lf
+*.php     text eol=lf
+*.java    text eol=lf
+*.c       text eol=lf
+*.h       text eol=lf
+*.cpp     text eol=lf
+*.hpp     text eol=lf
+*.go      text eol=lf
+*.rs      text eol=lf
+*.sh      text eol=lf
+Makefile  text eol=lf
+Dockerfile text eol=lf
+
+# ---------- 例外：必须保持 CRLF，否则老 cmd.exe 会读错标签跳转 ----------
+*.bat     text eol=crlf
+*.cmd     text eol=crlf
+*.ps1     text eol=crlf
+*.psm1    text eol=crlf
+
+# ---------- 二进制：禁止换行符转换，禁止文本 diff ----------
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.bmp     binary
+*.ico     binary
+*.webp    binary
+*.svg     text eol=lf
+*.pdf     binary
+*.zip     binary
+*.7z      binary
+*.rar     binary
+*.tar     binary
+*.gz      binary
+*.xz      binary
+*.bz2     binary
+*.pcap    binary
+*.pcapng  binary
+*.cap     binary
+*.mem     binary
+*.raw     binary
+*.dmp     binary
+*.bin     binary
+*.exe     binary
+*.dll     binary
+*.so      binary
+*.dylib   binary
+*.elf     binary
+*.o       binary
+*.a       binary
+*.class   binary
+*.jar     binary
+*.apk     binary
+*.img     binary
+*.iso     binary
+*.sqlite  binary
+*.db      binary
+
+# ---------- 让 diff 更好读（按语言高亮） ----------
+*.py      diff=python
+*.c       diff=cpp
+*.h       diff=cpp
+*.cpp     diff=cpp
+*.java    diff=java
+*.rb      diff=ruby
+*.php     diff=php
+*.sh      diff=sh
+
+# ---------- GitHub 语言统计：本仓库是知识库，不要把笔记算成某种语言 ----------
+*.md      linguist-documentation
+docs/**   linguist-documentation
